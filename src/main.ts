@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 import "leaflet/dist/leaflet.css";
 import "./style.css";
 import leaflet from "leaflet";
@@ -29,7 +30,7 @@ leaflet
   .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>"',
   })
   .addTo(map);
 
@@ -37,7 +38,7 @@ const playerMarker = leaflet.marker(MERRILL_CLASSROOM);
 playerMarker.bindTooltip("That's you!");
 playerMarker.addTo(map);
 
-const sensorButton = document.querySelector("#sensor")!;
+/*const sensorButton = document.querySelector("#sensor")!;
 sensorButton.addEventListener("click", () => {
   navigator.geolocation.watchPosition((position) => {
     playerMarker.setLatLng(
@@ -45,11 +46,11 @@ sensorButton.addEventListener("click", () => {
     );
     map.setView(playerMarker.getLatLng());
   });
-});
+});*/
 
 let points = 0;
 const statusPanel = document.querySelector<HTMLDivElement>("#statusPanel")!;
-statusPanel.innerHTML = "No points yet...";
+statusPanel.innerHTML = "No coins yet...";
 
 function makePit(i: number, j: number) {
   const bounds = leaflet.latLngBounds([
@@ -70,15 +71,29 @@ function makePit(i: number, j: number) {
     const container = document.createElement("div");
     container.innerHTML = `
                 <div>There is a pit here at "${i},${j}". It has value <span id="value">${value}</span>.</div>
-                <button id="poke">poke</button>`;
+                <button id="poke">poke</button>
+                <button id ="deposit">deposit</button>`;
+
     const poke = container.querySelector<HTMLButtonElement>("#poke")!;
     poke.addEventListener("click", () => {
       value--;
       container.querySelector<HTMLSpanElement>("#value")!.innerHTML =
         value.toString();
       points++;
-      statusPanel.innerHTML = `${points} points accumulated`;
+      statusPanel.innerHTML = `${points} coins accumulated`;
     });
+
+    const deposit = container.querySelector<HTMLButtonElement>("#deposit")!;
+    deposit.addEventListener("click", () => {
+      if (points != 0) {
+        value++;
+        container.querySelector<HTMLSpanElement>("#value")!.innerHTML =
+          value.toString();
+        points--;
+        statusPanel.innerHTML = `${points} coins accumulated`;
+      }
+    });
+
     return container;
   });
   pit.addTo(map);
