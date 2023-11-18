@@ -49,6 +49,14 @@ sensorButton.addEventListener("click", () => {
 });*/
 
 let points = 0;
+
+interface Coin {
+  i: number;
+  j: number;
+  serial: number;
+}
+
+const coinArray: Coin[] = [];
 const statusPanel = document.querySelector<HTMLDivElement>("#statusPanel")!;
 statusPanel.innerHTML = "No coins yet...";
 
@@ -73,24 +81,35 @@ function makePit(i: number, j: number) {
                 <div>There is a pit here at "${i},${j}". It has value <span id="value">${value}</span>.</div>
                 <button id="poke">poke</button>
                 <button id ="deposit">deposit</button>`;
-
     const poke = container.querySelector<HTMLButtonElement>("#poke")!;
+    const initialValue: number = value;
+    const pitArray: Coin[] = [];
+
     poke.addEventListener("click", () => {
+      const serial = initialValue - value;
       value--;
       container.querySelector<HTMLSpanElement>("#value")!.innerHTML =
         value.toString();
       points++;
-      statusPanel.innerHTML = `${points} coins accumulated`;
+      if (pitArray.length != 0) {
+        const temp: Coin = pitArray.pop()!;
+        coinArray.push(temp);
+        statusPanel.innerHTML = `${points} coins accumulated. You got coin from { i:${temp?.i}, j:${temp?.j}, serial:${temp?.serial}}`;
+      }
+      coinArray.push({ i, j, serial });
+      statusPanel.innerHTML = `${points} coins accumulated. You got coin from { i:${i}, j:${j}, serial:${serial}}`;
     });
 
     const deposit = container.querySelector<HTMLButtonElement>("#deposit")!;
     deposit.addEventListener("click", () => {
       if (points != 0) {
+        const temp: Coin = coinArray.pop()!;
+        statusPanel.innerHTML = `${points} coins accumulated. You just deposited the coin { i:${temp?.i}, j:${temp?.j}, serial:${temp?.serial}}`;
+        pitArray.push(temp);
         value++;
         container.querySelector<HTMLSpanElement>("#value")!.innerHTML =
           value.toString();
         points--;
-        statusPanel.innerHTML = `${points} coins accumulated`;
       }
     });
 

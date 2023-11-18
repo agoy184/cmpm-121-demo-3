@@ -1,5 +1,5 @@
 import leaflet from "leaflet";
-
+import luck from "./luck";
 interface Cell {
   readonly i: number;
   readonly j: number;
@@ -32,16 +32,39 @@ export class Board {
     return this.getCanonicalCell({ i, j });
   }
 
-  /*getCellBounds(cell: Cell): leaflet.LatLngBounds {
-      const i = cell.i;
-      const j = cell.j
-      return {i, j};
+  getCellBounds(cell: Cell, center: leaflet.LatLng): leaflet.LatLngBounds {
+    return leaflet.latLngBounds([
+      [
+        center.lat + cell.i * this.tileWidth,
+        center.lng + cell.j * this.tileWidth,
+      ],
+      [
+        center.lat + (cell.i + 1) * this.tileWidth,
+        center.lng + (cell.j + 1) * this.tileWidth,
+      ],
+    ]);
   }
 
   getCellsNearPoint(point: leaflet.LatLng): Cell[] {
     const resultCells: Cell[] = [];
     const originCell = this.getCellForPoint(point);
-    // ...
+    resultCells.push(originCell);
+    for (
+      let i = -this.tileVisibilityRadius;
+      i < this.tileVisibilityRadius;
+      i++
+    ) {
+      for (
+        let j = -this.tileVisibilityRadius;
+        j < this.tileVisibilityRadius;
+        j++
+      ) {
+        if (luck([i, j].toString()) < 0.1) {
+          const theCell = this.getCanonicalCell({ i, j });
+          resultCells.push(theCell);
+        }
+      }
+    }
     return resultCells;
-  }*/
+  }
 }
