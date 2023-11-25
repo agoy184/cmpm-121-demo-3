@@ -37,16 +37,7 @@ leaflet
 const playerMarker = leaflet.marker(MERRILL_CLASSROOM);
 playerMarker.bindTooltip("That's you!");
 playerMarker.addTo(map);
-
-/*const sensorButton = document.querySelector("#sensor")!;
-sensorButton.addEventListener("click", () => {
-  navigator.geolocation.watchPosition((position) => {
-    playerMarker.setLatLng(
-      leaflet.latLng(position.coords.latitude, position.coords.longitude)
-    );
-    map.setView(playerMarker.getLatLng());
-  });
-});*/
+//const originLatLng = playerMarker.getLatLng();
 
 let points = 0;
 
@@ -55,6 +46,55 @@ interface Coin {
   j: number;
   serial: number;
 }
+
+// Buttons at top of screen from index.html
+document.addEventListener("DOMContentLoaded", () => {
+  const sensorButton = document.querySelector("#sensor")!;
+  const northButton = document.querySelector("#north")!;
+  const southButton = document.querySelector("#south")!;
+  const westButton = document.querySelector("#west")!;
+  const eastButton = document.querySelector("#east")!;
+  const resetButton = document.querySelector("#reset")!;
+
+  // Add event listeners to the buttons
+  sensorButton.addEventListener("click", () => {
+    // Your code for the sensor button click event
+    console.log("hi");
+  });
+
+  northButton.addEventListener("click", () => {
+    const newLatLng = playerMarker.getLatLng();
+    newLatLng.lat += TILE_DEGREES;
+    playerMarker.setLatLng(newLatLng);
+    map.setView(newLatLng);
+  });
+
+  southButton.addEventListener("click", () => {
+    const newLatLng = playerMarker.getLatLng();
+    newLatLng.lat -= TILE_DEGREES;
+    playerMarker.setLatLng(newLatLng);
+    map.setView(newLatLng);
+  });
+
+  westButton.addEventListener("click", () => {
+    const newLatLng = playerMarker.getLatLng();
+    newLatLng.lng -= TILE_DEGREES;
+    playerMarker.setLatLng(newLatLng);
+    map.setView(newLatLng);
+  });
+
+  eastButton.addEventListener("click", () => {
+    const newLatLng = playerMarker.getLatLng();
+    newLatLng.lng += TILE_DEGREES;
+    playerMarker.setLatLng(newLatLng);
+    map.setView(newLatLng);
+  });
+
+  resetButton.addEventListener("click", () => {
+    //playerMarker.setLatLng(originLatLng);
+    //map.setView(originLatLng);
+  });
+});
 
 const coinArray: Coin[] = [];
 const statusPanel = document.querySelector<HTMLDivElement>("#statusPanel")!;
