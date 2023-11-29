@@ -58,8 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Add event listeners to the buttons
   sensorButton.addEventListener("click", () => {
-    // Your code for the sensor button click event
-    console.log("hi");
+    navigator.geolocation.watchPosition((position) => {
+      playerMarker.setLatLng(
+        leaflet.latLng(position.coords.latitude, position.coords.longitude)
+      );
+      map.setView(playerMarker.getLatLng());
+    });
+    console.log("New location");
   });
 
   northButton.addEventListener("click", () => {
