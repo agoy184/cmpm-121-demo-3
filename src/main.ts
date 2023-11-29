@@ -96,8 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   resetButton.addEventListener("click", () => {
-    //playerMarker.setLatLng(originLatLng);
-    //map.setView(originLatLng);
+    window.location.reload();
   });
 });
 
